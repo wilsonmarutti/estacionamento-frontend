@@ -1,0 +1,13 @@
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
+
+@import "src/styles/layout/styles/layout/layout.scss";
+@import "src/styles/flags/flags.css";
+@import "src/styles/badges.scss";
+@import "src/styles/code.scss";
+
+.preloader {
+   background-color: #585959;
+  // cor final background-color: #e9eeee;
+}
