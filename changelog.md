@@ -6,8 +6,8 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 ### Adicionado
 
-* (POR-3)[https://wilson-marutti.atlassian.net/browse/POR-3] - Criado dashboard Geral.
-* (POR-3)[https://wilson-marutti.atlassian.net/browse/POR-4] - Informações da quantidade de carros no local no momento atual.
+* #POR-3 - Criado dashboard Geral.
+* #POR-4 - Informações da quantidade de carros no local no momento atual.
 
 ### Alterado
 
