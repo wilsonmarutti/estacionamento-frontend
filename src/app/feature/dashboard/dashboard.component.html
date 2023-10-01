@@ -1,0 +1,38 @@
+<app-dashboard-card></app-dashboard-card>
+
+<div class="grid">
+  <div class="col-12 xl:col-12">
+    <div class="card">
+      <h5>Controle de vagas</h5>
+      <p-table [value]="vagas" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="numVaga">Números das Vaga
+              <p-sortIcon field="numVaga"></p-sortIcon>
+            </th>
+            <th pSortableColumn="disponivel">Disponível
+              <p-sortIcon field="disponivel"></p-sortIcon>
+            </th>
+            <th pSortableColumn="placaCarro">Placa do Carro
+              <p-sortIcon field="placaCarro"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-vagas>
+          <tr>
+            <td style="width: 33%; min-width: 8rem;">{{vagas.numVaga}}</td>
+            <td style="width: 33%; min-width: 8rem;">
+              <ng-container *ngIf="vagas.disponivel; else ocupada">
+                Disponível
+              </ng-container>
+              <ng-template #ocupada>
+                Ocupada
+              </ng-template>
+            </td>
+            <td style="width: 33%; min-width: 8rem;">{{vagas.placaCarro}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

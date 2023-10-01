@@ -3,16 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { DashboardComponent } from './feature/dashboard/dashboard.component';
+import {StyleClassModule} from 'primeng/styleclass';
+import { UpbarComponent } from './feature/upbar/upbar.component';
+import { TableModule } from 'primeng/table';
+import {DashboardCardsComponent} from "./feature/dashboard/dashboard-cards/dashboard-cards-component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    DashboardComponent,
+    UpbarComponent,
+    DashboardCardsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    StyleClassModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
