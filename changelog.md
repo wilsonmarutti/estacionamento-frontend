@@ -6,7 +6,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 ### Adicionado
 
-* #3 - Criado dashboard Geral.
+* ### #3 - Criado dashboard Geral.
 * #4 - Informações da quantidade de carros no local no momento atual.
 
 ### Alterado
