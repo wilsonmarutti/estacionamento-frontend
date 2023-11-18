@@ -17,6 +17,3 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 - Lista de correções de bugs.
 
 ### Removido
-
-- Lista de recursos ou funcionalidades removidas.
-
