@@ -1,0 +1,6 @@
+<video #videoElement width="640" height="480" autoplay></video>
+<button (click)="capture()">Capturar Imagem</button>
+<button (click)="requestCamera()">Solicitar Câmera</button>
+<canvas #canvasElement width="640" height="480" style="display:none;"></canvas>
+<div *ngIf="ocrResult">Resultado OCR: {{ ocrResult }}</div>
+

@@ -76,6 +76,10 @@ export class DashboardComponent implements OnInit {
         disponivel: false,
         numVaga: 11,
         placaCarro: 'GET81E9'
+      },      {
+        disponivel: false,
+        numVaga: 11,
+        placaCarro: 'GET81E9'
       },
     ]
   }

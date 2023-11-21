@@ -8,17 +8,11 @@
   </button>
 
   <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-    <button class="p-link layout-topbar-button">
-      <i class="pi pi-calendar"></i>
-      <span>Calendar</span>
+    <button class="p-link layout-topbar-button" (click)="home()">
+      <i class="pi pi-home"></i>
     </button>
-    <button class="p-link layout-topbar-button">
-      <i class="pi pi-user"></i>
-      <span>Profile</span>
-    </button>
-    <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
-      <i class="pi pi-cog"></i>
-      <span>Settings</span>
+    <button class="p-link layout-topbar-button" (click)="entradaCarro()">
+      <i class="pi pi-camera"></i>
     </button>
   </div>
 </div>

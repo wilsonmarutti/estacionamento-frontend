@@ -8,13 +8,15 @@ import {StyleClassModule} from 'primeng/styleclass';
 import { UpbarComponent } from './feature/upbar/upbar.component';
 import { TableModule } from 'primeng/table';
 import {DashboardCardsComponent} from "./feature/dashboard/dashboard-cards/dashboard-cards-component";
+import { EntradaEstacionamentoComponent } from './feature/entrada-estacionamento/entrada-estacionamento.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     UpbarComponent,
-    DashboardCardsComponent
+    DashboardCardsComponent,
+    EntradaEstacionamentoComponent
   ],
   imports: [
     BrowserModule,

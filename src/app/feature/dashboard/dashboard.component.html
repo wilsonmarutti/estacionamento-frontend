@@ -4,7 +4,7 @@
   <div class="col-12 xl:col-12">
     <div class="card">
       <h5>Controle de vagas</h5>
-      <p-table [value]="vagas" [paginator]="true" [rows]="10" responsiveLayout="scroll">
+      <p-table [value]="vagas" [paginator]="true" [rows]="10" [scrollable]="true">
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="numVaga">Números das Vaga
