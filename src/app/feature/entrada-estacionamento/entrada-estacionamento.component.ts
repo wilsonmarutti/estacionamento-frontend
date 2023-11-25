@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as Tesseract from "tesseract.js";
 import {EstacionamentoService} from "../../services/estacionamento.service";
-import {finalize} from "rxjs";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-entrada-estacionamento',
@@ -14,6 +14,7 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
 
   public ocrResult!: string;
   public isVisible: boolean = false;
+  public codigoQRCode: string = ''
 
   constructor(
     private estacionamentoService: EstacionamentoService,
@@ -64,7 +65,7 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
   private buscaVaga(placa: string) {
     this.estacionamentoService.getVagas().subscribe(
       vagas => {
-        const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel == true)
+        const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel)
         console.log(vagaEncontrada._id)
         this.salvarCarroVaga(vagaEncontrada._id)
       }
@@ -74,12 +75,14 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
   private salvarCarroVaga(id: string) {
     const payload = {
       id: [`${id}`],
-      placaCarro: this.ocrResult
+      placaCarro: this.ocrResult,
+      dataHoraEntrada: moment(new Date).format("MM-DD-YY:HH:MM:SS")
     }
+    console.log(payload)
     this.estacionamentoService.salvarVagas(payload)
       .subscribe(retorno => {
         this.isVisible = true;
-        console.log(retorno);
+        this.codigoQRCode = `${retorno.dataHoraEntrada}` + `${retorno.placaCarro}` + `${retorno.numVaga}`;
       })
   }
 

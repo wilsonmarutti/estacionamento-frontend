@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {VagasInterface} from "../../../core/vagas-interface";
 import {EstacionamentoService} from "../../services/estacionamento.service";
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +12,7 @@ export class DashboardComponent implements OnInit {
   public chartOptions: any;
   public chartData: any;
   public vagas!: VagasInterface[];
+  public items!: MenuItem[];
 
   constructor(
     private estacionamentoService: EstacionamentoService,
@@ -20,6 +22,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.initChart();
     this.getVagas();
+    this.getMenu()
   }
 
   private getVagas() {
@@ -30,6 +33,18 @@ export class DashboardComponent implements OnInit {
       error => {
       }
     );
+  }
+
+  private getMenu() {
+    this.items = [
+      {label: 'Ação 1', icon: 'pi pi-refresh', command: () => {
+          console.log('fdhasj')
+        }},
+      {label: 'Ação 2', icon: 'pi pi-times', command: () => {
+          console.log('fdhasj')
+        }},
+      // outras ações
+    ];
   }
 
   initChart() {

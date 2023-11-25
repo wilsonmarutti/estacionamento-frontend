@@ -12,6 +12,8 @@ import { EntradaEstacionamentoComponent } from './feature/entrada-estacionamento
 import {HttpClientModule} from "@angular/common/http";
 import {ButtonModule} from "primeng/button";
 import {QRCodeModule} from "angularx-qrcode";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -21,15 +23,17 @@ import {QRCodeModule} from "angularx-qrcode";
     DashboardCardsComponent,
     EntradaEstacionamentoComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        AppRoutingModule,
-        StyleClassModule,
-        TableModule,
-        ButtonModule,
-        QRCodeModule
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    StyleClassModule,
+    TableModule,
+    ButtonModule,
+    QRCodeModule,
+    SplitButtonModule,
+    BrowserAnimationsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

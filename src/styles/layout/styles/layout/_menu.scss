@@ -3,7 +3,6 @@
     width: 300px;
     height: calc(100vh - 9rem);
     z-index: 999;
-    overflow-y: auto;
     user-select: none;
     top: 7rem;
     left: 2rem;
@@ -92,7 +91,6 @@
         }
 
         ul {
-            overflow: hidden;
             border-radius: $borderRadius;
 
             li {
