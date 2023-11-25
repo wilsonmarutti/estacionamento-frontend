@@ -1,6 +1,15 @@
 <video #videoElement width="640" height="480" autoplay></video>
-<button (click)="capture()">Capturar Imagem</button>
-<button (click)="requestCamera()">Solicitar Câmera</button>
+<button (click)="capture()">Solicitar entrada</button>
 <canvas #canvasElement width="640" height="480" style="display:none;"></canvas>
 <div *ngIf="ocrResult">Resultado OCR: {{ ocrResult }}</div>
+
+
+<div *ngIf="isVisible" class="modal">
+  Sua vaga é: 18<br>
+  Hora da entrada: 13:20
+  <div class="qr-code-container">
+    <qrcode [qrdata]="'Seu texto aqui'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>
+</div>
+
 

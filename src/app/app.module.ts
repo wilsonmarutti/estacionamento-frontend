@@ -9,6 +9,9 @@ import { UpbarComponent } from './feature/upbar/upbar.component';
 import { TableModule } from 'primeng/table';
 import {DashboardCardsComponent} from "./feature/dashboard/dashboard-cards/dashboard-cards-component";
 import { EntradaEstacionamentoComponent } from './feature/entrada-estacionamento/entrada-estacionamento.component';
+import {HttpClientModule} from "@angular/common/http";
+import {ButtonModule} from "primeng/button";
+import {QRCodeModule} from "angularx-qrcode";
 
 @NgModule({
   declarations: [
@@ -18,12 +21,15 @@ import { EntradaEstacionamentoComponent } from './feature/entrada-estacionamento
     DashboardCardsComponent,
     EntradaEstacionamentoComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    StyleClassModule,
-    TableModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        StyleClassModule,
+        TableModule,
+        ButtonModule,
+        QRCodeModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

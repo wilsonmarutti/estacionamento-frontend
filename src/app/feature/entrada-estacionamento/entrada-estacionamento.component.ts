@@ -1,5 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import * as Tesseract from "tesseract.js";
+import {EstacionamentoService} from "../../services/estacionamento.service";
+import {finalize} from "rxjs";
 
 @Component({
   selector: 'app-entrada-estacionamento',
@@ -11,12 +13,13 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
   @ViewChild('canvasElement') public canvasElement!: ElementRef;
 
   public ocrResult!: string;
-  public cameraActive: boolean = false;
+  public isVisible: boolean = false;
 
-  constructor() {}
+  constructor(
+    private estacionamentoService: EstacionamentoService,
+  ) {}
 
   ngOnInit(): void {
-    // this.setupCamera();
   }
   ngAfterViewInit(): void {
     this.setupCamera();
@@ -44,34 +47,40 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
 
   recognizeText(): void {
     const canvas = this.canvasElement.nativeElement;
+    const ctx = canvas.getContext('2d');
+    ctx.filter = 'contrast(150%)';
+
+    ctx.drawImage(this.videoElement.nativeElement, 0, 0, 640, 480);
     Tesseract.recognize(
-        canvas.toDataURL(),
-        'eng',
-        {
-          logger: m => console.log(m)
-        }
+      canvas.toDataURL(),
+      'eng',
     ).then(({ data: { text } }) => {
       this.ocrResult = text;
-      console.log(text);
+      this.buscaVaga(text);
+
     });
   }
 
-  requestCamera(): void {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-          if (this.videoElement.nativeElement) {
-            this.videoElement.nativeElement.srcObject = stream;
-            this.cameraActive = true; // Ativa a exibição do vídeo
-          }
-        })
-        .catch(err => {
-          console.error('Erro ao acessar a câmera:', err);
-          // Aqui você pode adicionar uma mensagem para o usuário
-        });
-    } else {
-      console.error('Acesso à câmera não disponível.');
-      // Aqui você pode adicionar uma mensagem para o usuário
-    }
+  private buscaVaga(placa: string) {
+    this.estacionamentoService.getVagas().subscribe(
+      vagas => {
+        const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel == true)
+        console.log(vagaEncontrada._id)
+        this.salvarCarroVaga(vagaEncontrada._id)
+      }
+    );
   }
+
+  private salvarCarroVaga(id: string) {
+    const payload = {
+      id: [`${id}`],
+      placaCarro: this.ocrResult
+    }
+    this.estacionamentoService.salvarVagas(payload)
+      .subscribe(retorno => {
+        this.isVisible = true;
+        console.log(retorno);
+      })
+  }
+
 }

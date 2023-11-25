@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {VagasInterface} from "../../../core/vagas-interface";
+import {EstacionamentoService} from "../../services/estacionamento.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,9 @@ export class DashboardComponent implements OnInit {
   public chartData: any;
   public vagas!: VagasInterface[];
 
-  constructor() {
+  constructor(
+    private estacionamentoService: EstacionamentoService,
+  ) {
   }
 
   ngOnInit() {
@@ -20,70 +23,14 @@ export class DashboardComponent implements OnInit {
   }
 
   private getVagas() {
-    this.vagas = [
-      {
-        disponivel: false,
-        numVaga: 1,
-        placaCarro: 'GET81E9'
+    this.estacionamentoService.getVagas().subscribe(
+      vagas => {
+        this.vagas = vagas
       },
-      {
-        disponivel: true,
-        numVaga: 2,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: true,
-        numVaga: 3,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: true,
-        numVaga: 4,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: true,
-        numVaga: 5,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: false,
-        numVaga: 6,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: true,
-        numVaga: 7,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: false,
-        numVaga: 8,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: true,
-        numVaga: 9,
-        placaCarro: 'GET81E9'
-      },
-
-      {
-        disponivel: false,
-        numVaga: 10,
-        placaCarro: 'GET81E9'
-      },
-      {
-        disponivel: false,
-        numVaga: 11,
-        placaCarro: 'GET81E9'
-      },      {
-        disponivel: false,
-        numVaga: 11,
-        placaCarro: 'GET81E9'
-      },
-    ]
+      error => {
+      }
+    );
   }
-
 
   initChart() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -143,4 +90,5 @@ export class DashboardComponent implements OnInit {
       }
     };
   }
+
 }
