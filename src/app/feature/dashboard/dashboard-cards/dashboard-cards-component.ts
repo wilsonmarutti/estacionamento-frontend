@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {InfoDashboardCardsInterface} from "../../../../core/info-dashboard-cards-interface";
+import {InfoDashboardCardsInterface} from "../../../../core/interfaces/info-dashboard-cards-interface";
 
 @Component({
   selector: 'app-dashboard-card',

@@ -33,7 +33,7 @@
             </td>
             <td style="width: 33%; min-width: 8rem;">{{vagas.placaCarro}}</td>
             <td style="width: 33%; min-width: 8rem;">
-              <p-splitButton label="Ações" [model]="items"></p-splitButton>
+              <p-button (onClick)="calcularPagamento(vagas)">Receber</p-button>
             </td>
           </tr>
         </ng-template>

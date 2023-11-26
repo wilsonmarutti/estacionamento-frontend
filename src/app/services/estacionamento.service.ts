@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {VagasInterface} from "../../core/vagas-interface";
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +15,14 @@ export class EstacionamentoService {
     return this.http.get<any>(`${this.apiUrl}/vagas`);
   }
 
-  postVagas(data: VagasInterface): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/vagas`, data);
-  }
   putVagas(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vagas/editar`, data);
   }
   salvarVagas(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vagas/salvar`, data);
+  }
+
+  efetuaPagamento(pagamento: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/pagamento`, pagamento);
   }
 }
