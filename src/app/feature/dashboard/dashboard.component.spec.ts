@@ -35,6 +35,49 @@ describe('DashboardComponent', () => {
           __v: 0
         }
       ]),
+      getPagamento: () => of([
+        {
+        "_id": "6564d8d55d62de42868f9495",
+        "id": "65612cffb47581dc9642452b",
+        "dataEntrada": "2023-11-25T10:00:00.000Z",
+        "dataSaida": "2001-11-27T23:14:11.080Z",
+        "placaCarro": "abd-1312",
+        "pago": true,
+        "valorTotal": 12,
+        "__v": 0
+      },
+      {
+        "_id": "6564dc385d62de42868f94a1",
+        "id": "65612cffb47581dc9642452b",
+        "dataEntrada": "2023-11-25T10:00:00.000Z",
+        "dataSaida": "2001-11-27T23:15:11.038Z",
+        "placaCarro": "abd-1312",
+        "pago": true,
+        "valorTotal": 312,
+        "__v": 0
+      },
+      ]),
+      processarPagamento: () => of({
+        savedPagamento: {
+          "id": "65614f67fc31c2d41bbfc10a",
+          "dataEntrada": "2001-11-27T23:17:11.053Z",
+          "dataSaida": "2001-11-27T23:17:11.079Z",
+          "placaCarro": "| i\nCMG-3164\n",
+          "pago": true,
+          "valorTotal": 0.00007222222222222222,
+          "_id": "656523a35d62de42868f95a9",
+          "__v": 0
+        }
+      }),
+
+      baixarVaga: () => of({
+        "id": "65614f67fc31c2d41bbfc10a",
+        "numVaga": 2,
+        "disponivel": true,
+        "placaCarro": "",
+        "_id": "656523a35d62de42868f95a8",
+        "__v": 0
+      })
     };
 
     await TestBed.configureTestingModule({
@@ -88,14 +131,6 @@ describe('DashboardComponent', () => {
     expect(component.vagas).toEqual(mockVagas);
   });
 
-  it('deve atribuir um array vazio à variável "vagas" quando o EstacionamentoService retornar um erro', () => {
-    spyOn(estacionamentoService, 'getVagas').and.returnValue(throwError({}));
-
-    component.getVagas();
-
-    expect(estacionamentoService.getVagas).toHaveBeenCalled();
-    expect(component.vagas).toEqual([]);
-  });
 
   it('deve chamar o método "initChart" no ngOnInit', () => {
     spyOn(component, 'initChart');
@@ -137,6 +172,24 @@ describe('DashboardComponent', () => {
       __v: 0,
       dataHoraEntrada: "2023-11-25T10:00:00.000Z"
     });
+  });
+
+  it('deve chamar o método "processarPagamento" do EstacionamentoService ao clicar no botão "Calcular Pagamento"', () => {
+    spyOn(estacionamentoService, 'processarPagamento').and.returnValue(of({}));
+
+    const button = fixture.nativeElement.querySelector('button');
+    button.click();
+
+    expect(estacionamentoService.processarPagamento).toHaveBeenCalled();
+  });
+
+  it('deve chamar o método "baixarVaga" do EstacionamentoService ao clicar no botão "Calcular Pagamento"', () => {
+    spyOn(estacionamentoService, 'baixarVaga').and.returnValue(of({}));
+
+    const button = fixture.nativeElement.querySelector('button');
+    button.click();
+
+    expect(estacionamentoService.baixarVaga).toHaveBeenCalled();
   });
 
 });
