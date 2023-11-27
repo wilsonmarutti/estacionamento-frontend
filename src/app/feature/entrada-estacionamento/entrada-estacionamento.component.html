@@ -1,12 +1,14 @@
-<video #videoElement width="640" height="480" autoplay></video>
+<div class="camera-container">
+  <video #videoElement width="640" height="480" autoplay></video>
+  <canvas #canvasElement width="640" height="480"></canvas>
+</div>
 <button (click)="capture()">Solicitar entrada</button>
-<canvas #canvasElement width="640" height="480" style="display:none;"></canvas>
 <div *ngIf="ocrResult">Resultado OCR: {{ ocrResult }}</div>
 
 
 <div *ngIf="isVisible" class="modal">
-  Sua vaga é: 18<br>
-  Hora da entrada: 13:20
+  Sua vaga é: {{dadosCardQrCode.numVaga}}<br>
+  Hora da entrada: {{dadosCardQrCode.dataHoraEntrada}}
   <div class="qr-code-container">
     <qrcode [qrdata]="codigoQRCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
   </div>

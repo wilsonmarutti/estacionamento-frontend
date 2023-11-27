@@ -8,41 +8,66 @@ import * as moment from "moment";
   templateUrl: './entrada-estacionamento.component.html',
   styleUrls: ['./entrada-estacionamento.component.css']
 })
-export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
+export class EntradaEstacionamentoComponent implements AfterViewInit{
   @ViewChild('videoElement') public videoElement!: ElementRef;
   @ViewChild('canvasElement') public canvasElement!: ElementRef;
 
   public ocrResult!: string;
   public isVisible: boolean = false;
   public codigoQRCode: string = ''
+  public dadosCardQrCode: any;
 
   constructor(
     private estacionamentoService: EstacionamentoService,
   ) {}
 
-  ngOnInit(): void {
-  }
   ngAfterViewInit(): void {
     this.setupCamera();
   }
 
   setupCamera(): void {
-    if (navigator.mediaDevices.getUserMedia) {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
           .then(stream => {
-            this.videoElement!.nativeElement.srcObject = stream;
+            this.videoElement.nativeElement.srcObject = stream;
+            this.videoElement.nativeElement.onloadedmetadata = () => {
+              this.videoElement.nativeElement.play();
+              this.drawHighlight();
+            };
           })
           .catch(err => {
-            console.error("Error accessing the camera", err);
+            console.error('Error accessing the camera', err);
           });
     } else {
       alert('Sorry, camera not available.');
     }
   }
 
+drawHighlight(): void {
+  const context = this.canvasElement.nativeElement.getContext('2d');
+  if (context) {
+    // Limpe o canvas antes de desenhar o novo retângulo
+    context.clearRect(0, 0, this.canvasElement.nativeElement.width, this.canvasElement.nativeElement.height);
+
+    // Ajuste estas coordenadas e tamanho conforme necessário para enquadrar a placa corretamente
+    const x = 20; // Ajuste para a coordenada X do início da placa
+    const y = 320; // Ajuste para a coordenada Y do início da placa
+    const width = this.canvasElement.nativeElement.width - 40; // Largura aproximada da placa
+    const height = 100; // Altura aproximada da placa
+
+    // Desenhe o retângulo
+    context.beginPath();
+    context.rect(x, y, width, height);
+    context.strokeStyle = 'red';
+    context.lineWidth = 5;
+    context.stroke();
+  }
+}
+
   capture(): void {
     const context = this.canvasElement.nativeElement.getContext('2d');
     context.drawImage(this.videoElement.nativeElement, 0, 0, 640, 480);
+    this.drawHighlight();
     this.recognizeText();
   }
 
@@ -66,7 +91,6 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
     this.estacionamentoService.getVagas().subscribe(
       vagas => {
         const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel)
-        console.log(vagaEncontrada._id)
         this.salvarCarroVaga(vagaEncontrada._id)
       }
     );
@@ -78,9 +102,10 @@ export class EntradaEstacionamentoComponent implements OnInit, AfterViewInit{
       placaCarro: this.ocrResult,
       dataHoraEntrada: moment(new Date).format("MM-DD-YY:HH:MM:SS")
     }
-    console.log(payload)
     this.estacionamentoService.salvarVagas(payload)
       .subscribe(retorno => {
+        this.dadosCardQrCode = retorno;
+        console.log(this.dadosCardQrCode)
         this.isVisible = true;
         this.codigoQRCode = `${retorno.dataHoraEntrada}` + `${retorno.placaCarro}` + `${retorno.numVaga}`;
       })

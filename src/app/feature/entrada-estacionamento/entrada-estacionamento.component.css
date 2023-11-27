@@ -51,6 +51,27 @@ button {
   text-align: center;
 }
 
+.camera-container {
+  position: relative;
+  width: 640px;
+  /* Deve ser o mesmo que o vídeo e o canvas */
+  height: 480px;
+  /* Deve ser o mesmo que o vídeo e o canvas */
+}
+
+.camera-container video,
+.camera-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Remova display: none; para garantir que o canvas seja visível */
 #canvasElement {
-  display: none;
+  display: block;
+  /* Definir como block para garantir que o canvas seja visível */
+  z-index: 10;
+  /* Garantir que o canvas esteja sobre o vídeo */
 }

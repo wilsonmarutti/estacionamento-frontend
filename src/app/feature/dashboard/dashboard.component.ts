@@ -36,7 +36,6 @@ export class DashboardComponent implements OnInit {
   }
 
   public calcularPagamento(rowData: any) {
-    console.log(rowData)
     const payload = {
       id: rowData._id,
       placaCarro: rowData.placaCarro,
