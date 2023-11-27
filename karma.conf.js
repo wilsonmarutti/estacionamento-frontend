@@ -1,6 +1,7 @@
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
     basePath: '',
+    browsers: ['ChromeHeadless'],
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
@@ -11,24 +12,20 @@ module.exports = function (config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    jasmineHtmlReporter: {
-      suppressAll: true // removes the duplicated traces
+    coverageIstanbulReporter: {
+      dir: require('path').join(__dirname, './coverage'), reports: [ 'html', 'lcovonly'],
+      fixWebpackSourcePaths: true
     },
-    coverageReporter: {
-      dir: require('path').join(__dirname, './coverage'),
-      subdir: '.',
-      reporters: [{ type: 'html' }, { type: 'text-summary' }]
-    },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['spec'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadlessCI'], // Modificado para usar o navegador personalizado
+    browsers: ['ChromeHeadlessNoSandbox'],
     customLaunchers: {
-      ChromeHeadlessCI: {
+      ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox', '--disable-gpu'] // Flags necessárias para o Chrome Headless
+        flags: ['--no-sandbox', '--disable-setuid-sandbox']
       }
     },
     singleRun: false,

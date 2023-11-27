@@ -2,7 +2,7 @@
 import { DashboardComponent } from './dashboard.component';
 import { EstacionamentoService } from '../../services/estacionamento.service';
 import { Observable, of } from 'rxjs';
-import {ComponentFixture, TestBed} from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;

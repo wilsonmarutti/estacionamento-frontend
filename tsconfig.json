@@ -18,17 +18,22 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "types": ["jasmine"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
       "ES2022",
       "dom"
     ]
   },
+  "include": [
+    "src/**/*.ts" // Inclui todos os arquivos TypeScript na pasta 'src' e subpastas
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "types": ["node"]
+    "types": ["node", "jasmine"]
   }
 }
