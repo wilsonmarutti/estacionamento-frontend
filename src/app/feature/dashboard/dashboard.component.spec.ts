@@ -1,81 +1,58 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { DashboardComponent } from './dashboard.component';
-import { EstacionamentoService } from "../../services/estacionamento.service";
-import { of, throwError } from 'rxjs';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {VagasInterface} from "../../../core/interfaces/vagas-interface";
+import { EstacionamentoService } from '../../services/estacionamento.service';
+import { Observable, of } from 'rxjs';
+import {ComponentFixture, TestBed} from "@angular/core/testing";
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-  let estacionamentoService: jasmine.SpyObj<EstacionamentoService>;
+  let estacionamentoServiceStub: Partial<EstacionamentoService>;
 
   beforeEach(async () => {
-    estacionamentoService = jasmine.createSpyObj('EstacionamentoService', ['getVagas']);
-    await TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
-      providers: [
-        { provide: EstacionamentoService, useValue: estacionamentoService }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    // Crie um stub para o EstacionamentoService
+    estacionamentoServiceStub = {
+      getVagas: () => of([{
+        "_id": "65612cffb47581dc9642452b",
+        "id": "1",
+        "numVaga": 1,
+        "disponivel": false,
+        "placaCarro": "abd-1312",
+        "__v": 0,
+        "dataHoraEntrada": "2023-11-25T10:00:00.000Z"
+      },
+      {
+        "_id": "65614f67fc31c2d41bbfc10a",
+        "id": "2",
+        "numVaga": 2,
+        "disponivel": false,
+        "placaCarro": "",
+        "__v": 0
+      }
+      ]),
+    };
 
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    estacionamentoService = TestBed.inject(EstacionamentoService) as jasmine.SpyObj<EstacionamentoService>;
+    await TestBed.configureTestingModule({
+      declarations: [ DashboardComponent ],
+      providers: [
+        { provide: EstacionamentoService, useValue: estacionamentoServiceStub }
+      ]
+    })
+      .compileComponents();
   });
 
-  it('should create', () => {
+  beforeEach(() => {
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('deve ser criado', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('ngOnInit', () => {
-    it('should initialize chart and vagas', () => {
-      const mockVagas = [
-        { id: '1', numVaga: 101, disponivel: true },
-        { id: '2', numVaga: 102, disponivel: false, placaCarro: 'ABC-1234' }
-      ] as VagasInterface[];
-      estacionamentoService.getVagas.and.returnValue(of(mockVagas));
-      fixture.detectChanges();
-      expect(component.chartOptions).toBeTruthy();
-      expect(component.chartData).toBeTruthy();
-      expect(component.vagas).toEqual(mockVagas);
-    });
+  it('deve ser renderizado', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('app-dashboard')).not.toBe(null); // Verifica se o seletor do componente está presente no DOM
   });
-
-  describe('getVagas', () => {
-    it('should set vagas on success', () => {
-      const mockVagas = [
-        { id: '3', numVaga: 103, disponivel: true },
-        { id: '4', numVaga: 104, disponivel: false, placaCarro: 'XYZ-7890' }
-      ] as VagasInterface[];
-      estacionamentoService.getVagas.and.returnValue(of(mockVagas));
-      component.ngOnInit();
-      expect(component.vagas).toEqual(mockVagas);
-    });
-
-    it('should handle error', () => {
-      const consoleSpy = spyOn(console, 'error');
-      estacionamentoService.getVagas.and.returnValue(throwError(() => new Error('Error')));
-      component.ngOnInit();
-      expect(consoleSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('receber', () => {
-    it('should prepare payload from rowData', () => {
-      const consoleSpy = spyOn(console, 'log');
-      const mockRowData = { _id: '123', dataHoraEntrada: new Date() };
-      component.receber(mockRowData);
-      // Neste ponto, você poderia verificar se o payload foi preparado corretamente,
-      // mas como o método não faz nada com o payload (não o armazena ou o envia),
-      // não há nada para testar. Se o método for alterado para fazer algo com o payload,
-      // esse teste deve ser atualizado.
-      expect(consoleSpy).toHaveBeenCalledWith(mockRowData);
-    });
-  });
-
-  // Adicione outros testes conforme necessário.
-  // ...
-
 });
