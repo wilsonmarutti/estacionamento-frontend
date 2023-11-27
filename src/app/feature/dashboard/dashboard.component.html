@@ -4,7 +4,7 @@
   <div class="col-12 xl:col-12">
     <div class="card">
       <h5>Controle de vagas</h5>
-      <p-table [value]="vagas" [paginator]="true" [rows]="10" [scrollable]="true">
+      <p-table #DashboardComponent (onLazyLoad)="getVagas()" [value]="vagas" [paginator]="true" [rows]="10" [scrollable]="true">
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="numVaga">Números das Vaga
@@ -33,7 +33,7 @@
             </td>
             <td style="width: 33%; min-width: 8rem;">{{vagas.placaCarro}}</td>
             <td style="width: 33%; min-width: 8rem;">
-              <p-button (onClick)="calcularPagamento(vagas)">Receber</p-button>
+              <p-button [disabled]="vagas.disponivel" (onClick)="calcularPagamento(vagas)">Receber</p-button>
             </td>
           </tr>
         </ng-template>

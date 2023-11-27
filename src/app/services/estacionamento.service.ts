@@ -15,14 +15,17 @@ export class EstacionamentoService {
     return this.http.get<any>(`${this.apiUrl}/vagas`);
   }
 
-  putVagas(data: any): Observable<any> {
+  getPagamento(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/pagamento`);
+  }
+
+  baixarVaga(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vagas/editar`, data);
   }
   salvarVagas(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vagas/salvar`, data);
   }
-
-  efetuaPagamento(pagamento: any): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/pagamento`, pagamento);
+  processarPagamento(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/pagamento/processarPagamento`, data);
   }
 }

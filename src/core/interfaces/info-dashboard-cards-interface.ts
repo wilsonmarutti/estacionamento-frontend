@@ -1,7 +1,7 @@
 export interface InfoDashboardCardsInterface {
-  vagaOcupada: number,
-  vagaDisponivel: number,
-  qtdReceitaDia: number,
-  qtdVagasOcupadasDia: number,
+  vagaOcupada: any,
+  vagaDisponivel: any,
+  qtdReceitaDia: any,
+  qtdVagasOcupadasDia: any,
 
 }

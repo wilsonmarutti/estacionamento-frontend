@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {VagasInterface} from "../../../core/interfaces/vagas-interface";
 import {EstacionamentoService} from "../../services/estacionamento.service";
-import {MenuItem} from "primeng/api";
+import { Table } from 'primeng/table'; 
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +10,9 @@ import {MenuItem} from "primeng/api";
   styleUrls: ['./dashboard.component.css',]
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('DashboardComponent') table!: Table;
+
+
   public chartOptions: any;
   public chartData: any;
   public vagas!: VagasInterface[];
@@ -28,8 +32,6 @@ export class DashboardComponent implements OnInit {
       vagas => {
         this.vagas = vagas
       },
-      error => {
-      }
     );
   }
 
@@ -37,8 +39,31 @@ export class DashboardComponent implements OnInit {
     console.log(rowData)
     const payload = {
       id: rowData._id,
-      dataEntrada: rowData.dataHoraEntrada
+      placaCarro: rowData.placaCarro,
+      dataEntrada: rowData.dataHoraEntrada,
+      dataSaida: moment(new Date).format("MM-DD-YY:HH:MM:SS"),
+      valorPorHora: 10,
+      pago: true
     }
+
+    this.estacionamentoService.processarPagamento(payload).subscribe(
+      (retorno: any) => {
+        if (retorno) {
+          const payload = {
+            id: retorno.savedPagamento.id,
+          };
+          this.estacionamentoService.baixarVaga(payload).subscribe(() => { 
+            this.resetGrid();
+        });
+        }
+        
+      },
+    );
+
+  }
+
+  resetGrid() {
+    this.table.reset();
   }
 
   initChart() {
