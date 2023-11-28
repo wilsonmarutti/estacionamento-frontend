@@ -37,4 +37,4 @@ jobs:
           args: >
             -Dsonar.projectKey=wilsonmarutti_estacionamento-frontend
             -Dsonar.organization=wilsonmarutti
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
