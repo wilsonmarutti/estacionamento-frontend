@@ -18,7 +18,7 @@ export class EntradaEstacionamentoComponent implements AfterViewInit{
   public dadosCardQrCode: any;
 
   constructor(
-    private estacionamentoService: EstacionamentoService,
+    public estacionamentoService: EstacionamentoService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -43,26 +43,26 @@ export class EntradaEstacionamentoComponent implements AfterViewInit{
     }
   }
 
-drawHighlight(): void {
-  const context = this.canvasElement.nativeElement.getContext('2d');
-  if (context) {
-    // Limpe o canvas antes de desenhar o novo retângulo
-    context.clearRect(0, 0, this.canvasElement.nativeElement.width, this.canvasElement.nativeElement.height);
+  drawHighlight(): void {
+    const context = this.canvasElement.nativeElement.getContext('2d');
+    if (context) {
+      // Limpe o canvas antes de desenhar o novo retângulo
+      context.clearRect(0, 0, this.canvasElement.nativeElement.width, this.canvasElement.nativeElement.height);
 
-    // Ajuste estas coordenadas e tamanho conforme necessário para enquadrar a placa corretamente
-    const x = 20; // Ajuste para a coordenada X do início da placa
-    const y = 320; // Ajuste para a coordenada Y do início da placa
-    const width = this.canvasElement.nativeElement.width - 40; // Largura aproximada da placa
-    const height = 100; // Altura aproximada da placa
+      // Ajuste estas coordenadas e tamanho conforme necessário para enquadrar a placa corretamente
+      const x = 20; // Ajuste para a coordenada X do início da placa
+      const y = 320; // Ajuste para a coordenada Y do início da placa
+      const width = this.canvasElement.nativeElement.width - 40; // Largura aproximada da placa
+      const height = 100; // Altura aproximada da placa
 
-    // Desenhe o retângulo
-    context.beginPath();
-    context.rect(x, y, width, height);
-    context.strokeStyle = 'red';
-    context.lineWidth = 5;
-    context.stroke();
+      // Desenhe o retângulo
+      context.beginPath();
+      context.rect(x, y, width, height);
+      context.strokeStyle = 'red';
+      context.lineWidth = 5;
+      context.stroke();
+    }
   }
-}
 
   capture(): void {
     const context = this.canvasElement.nativeElement.getContext('2d');
@@ -87,7 +87,7 @@ drawHighlight(): void {
     });
   }
 
-  private buscaVaga(placa: string) {
+  buscaVaga(placa: string) {
     this.estacionamentoService.getVagas().subscribe(
       vagas => {
         const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel)
@@ -96,7 +96,7 @@ drawHighlight(): void {
     );
   }
 
-  private salvarCarroVaga(id: string) {
+  salvarCarroVaga(id: string) {
     const payload = {
       id: [`${id}`],
       placaCarro: this.ocrResult,
