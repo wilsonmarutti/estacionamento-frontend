@@ -15,8 +15,8 @@ jobs:
           fetch-depth: 0 
       - name: Install dependencies
         run: yarn
-      - name: Test and coverage
-        run: nyc jasmine
+      - name: Run tests and collect coverage
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox --code-coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
