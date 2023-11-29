@@ -6,7 +6,8 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "noImplicitAny": false,
   },
   "files": [
     "src/polyfills.ts",

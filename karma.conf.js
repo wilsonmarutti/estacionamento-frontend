@@ -15,10 +15,10 @@ module.exports = function(config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      reports: ['html', 'cobertura', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'coverage-istanbul'],
+    reporters: ['spec',],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
