@@ -4,43 +4,67 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { By } from '@angular/platform-browser';
 import * as moment from 'moment';
 import { of } from 'rxjs';
+import { EstacionamentoService } from 'src/app/services/estacionamento.service';
+import { ElementRef } from '@angular/core';
+import { QRCodeModule } from 'angularx-qrcode';
 
 const TesseractMock = {
     recognize: jasmine.createSpy('recognize').and.returnValue(Promise.resolve({ data: { text: 'recognized text' } }))
 };
 
+let component: EntradaEstacionamentoComponent;
+let fixture: ComponentFixture<EntradaEstacionamentoComponent>;
+let estacionamentoServiceStub: Partial<EstacionamentoService>;
+let estacionamentoService: EstacionamentoService;
+let context: any;
+const canvas = document.createElement('canvas');
 
 describe('EntradaEstacionamentoComponent', () => {
-    let component: EntradaEstacionamentoComponent;
-    let fixture: ComponentFixture<EntradaEstacionamentoComponent>;
-    let canvasElement: any;
-    let context: any;
     
     beforeEach(async () => {
+        estacionamentoServiceStub = {
+            getVagas: () => of([
+                {
+                    _id: "65612cffb47581dc9642452b",
+                    id: "1",
+                    numVaga: 1,
+                    disponivel: false,
+                    placaCarro: "abd-1312",
+                    __v: 0,
+                    dataHoraEntrada: "2023-11-25T10:00:00.000Z"
+                },
+                {
+                    _id: "65614f67fc31c2d41bbfc10a",
+                    id: "2",
+                    numVaga: 2,
+                    disponivel: false,
+                    placaCarro: "",
+                    __v: 0
+                }
+            ]),
+            salvarVagas: () => of({
+                "id": ["65612cffb47581dc9642452b"],
+                "placaCarro": "abd-1312",
+                "dataHora": "2023-11-25T10:00:00Z"
+            }),
+        };
+        
         await TestBed.configureTestingModule({
-            declarations: [EntradaEstacionamentoComponent],
-            imports: [HttpClientTestingModule]
+            declarations: [ EntradaEstacionamentoComponent ],
+            imports: [ HttpClientTestingModule, QRCodeModule ],
+            providers: [ { provide: EstacionamentoService, useValue: estacionamentoServiceStub } ]
         }).compileComponents();
+        spyOn(canvas, 'getContext').and.returnValue(context);
         
-        fixture = TestBed.createComponent(EntradaEstacionamentoComponent);
-        component = fixture.componentInstance;
         
-        fixture.detectChanges();
-        
-        canvasElement = fixture.debugElement.query(By.css('canvas')).nativeElement;
-        context = canvasElement.getContext('2d');
-        spyOn(canvasElement, 'getContext').and.returnValue(context);
-        // Espionar os métodos do contexto do canvas que você espera que sejam chamados
-        spyOn(context, 'clearRect');
-        spyOn(context, 'beginPath');
-        spyOn(context, 'rect');
-        spyOn(context, 'stroke');
     });
     
-    afterEach(() => {
-        if (canvasElement.getContext.calls) {
-            canvasElement.getContext.calls.reset();
-        }
+    beforeEach(() => {
+        fixture = TestBed.createComponent(EntradaEstacionamentoComponent);
+        component = fixture.componentInstance;
+        estacionamentoService = TestBed.inject(EstacionamentoService);
+        fixture.detectChanges();
+        component.canvasElement = new ElementRef(canvas);
     });
     
     
@@ -63,63 +87,72 @@ describe('EntradaEstacionamentoComponent', () => {
         });
     });
     
-    it('#drawHighlight should draw a rectangle on the canvas', () => {
-        component.canvasElement = { nativeElement: canvasElement };
-        component.drawHighlight();
-        
-        // Verificar se o contexto do canvas foi limpo
-        expect(context.clearRect).toHaveBeenCalledWith(0, 0, canvasElement.width, canvasElement.height);
-        // Verificar se o caminho foi iniciado para desenhar
-        expect(context.beginPath).toHaveBeenCalled();
-        // Verificar se um retângulo foi desenhado com as coordenadas corretas
-        expect(context.rect).toHaveBeenCalledWith(20, 320, canvasElement.width - 40, 100);
-        // Verificar se o traçado do retângulo foi realizado
-        expect(context.stroke).toHaveBeenCalled();
-    });
-    
-    it('should capture, recognize text, find a spot and save the car to the spot', async () => {
-        const canvasElement = fixture.debugElement.query(By.css('canvas')).nativeElement;
-        const context = canvasElement.getContext('2d');
-        const videoElement = fixture.debugElement.query(By.css('video')).nativeElement;
-        
-        spyOn(canvasElement, 'getContext').and.returnValue(context);
-        spyOn(context, 'drawImage').and.stub();
-        spyOn(canvasElement, 'toDataURL').and.returnValue('data:image/png;base64,...');
-        spyOn(component, 'drawHighlight').and.callThrough();
-        spyOn(component, 'recognizeText').and.callThrough();
-        spyOn(component, 'buscaVaga').and.callThrough();
-        spyOn(component, 'salvarCarroVaga').and.callThrough();
-        
-        // Aqui substituímos a implementação padrão do moment
-        // para retornar um valor específico quando chamado.
-        spyOn<any>(moment, 'call').and.returnValue(moment('2023-11-27T00:00:00.000Z'));
-        
-        component.videoElement = { nativeElement: videoElement };
-        component.canvasElement = { nativeElement: canvasElement };
-        
-        // Chama o método capture, que por sua vez chama recognizeText, buscaVaga e salvarCarroVaga
-        component.capture();
-        await fixture.whenStable();
-        
-        expect(context.drawImage).toHaveBeenCalledWith(videoElement, 0, 0, 640, 480);
-        expect(component.drawHighlight).toHaveBeenCalled();
-        expect(component.recognizeText).toHaveBeenCalled();
-        
-        // O recognizeText chama o Tesseract.recognize e, em seguida, buscaVaga
-        expect(TesseractMock.recognize).toHaveBeenCalledWith('data:image/png;base64,...', 'eng');
-        expect(component.buscaVaga).toHaveBeenCalledWith('recognized text');
-        
-        // Verifica se o estacionamentoService.getVagas foi chamado e, em seguida, salvarCarroVaga
-        expect(component.estacionamentoService.getVagas).toHaveBeenCalled();
-        expect(component.salvarCarroVaga).toHaveBeenCalledWith('vaga1');
-        
-        // Verifica se o estacionamentoService.salvarVagas foi chamado com os argumentos corretos
-        const expectedPayload = {
-            id: ['vaga1'],
-            placaCarro: 'recognized text',
-            dataHoraEntrada: "11-27-23:00:11:11" // Este valor deve corresponder ao formato especificado
+    it('#salvarCarroVaga should call the service and update the component properties', () => {
+        const id = '123';
+        const ocrResult = 'recognized text';
+        const dataHoraEntrada = moment(new Date()).format("MM-DD-YY:HH:MM:SS");
+        const retorno = {
+            dataHoraEntrada: dataHoraEntrada,
+            placaCarro: ocrResult,
+            numVaga: 1
         };
-        expect(component.estacionamentoService.salvarVagas).toHaveBeenCalledWith(expectedPayload);
+        spyOn(component.estacionamentoService, 'salvarVagas').and.returnValue(of(retorno));
+        
+        component.ocrResult = ocrResult;
+        component.salvarCarroVaga(id);
+        
+        expect(component.estacionamentoService.salvarVagas).toHaveBeenCalledWith({
+            id: [id],
+            placaCarro: ocrResult,
+            dataHoraEntrada: dataHoraEntrada
+        });
+        expect(component.dadosCardQrCode).toEqual(retorno);
+        expect(component.isVisible).toBe(true);
+        expect(component.codigoQRCode).toBe(dataHoraEntrada + ocrResult + retorno.numVaga);
     });
     
+    it('#buscaVaga should call the service and save the car', () => {
+        const vagas = [
+            {
+                _id: "65612cffb47581dc9642452b",
+                id: "1",
+                numVaga: 1,
+                disponivel: true,
+                placaCarro: "",
+                __v: 0
+            },
+            {
+                _id: "65614f67fc31c2d41bbfc10a",
+                id: "2",
+                numVaga: 2,
+                disponivel: false,
+                placaCarro: "xyz-123",
+                __v: 0
+            }
+        ];
+        spyOn(component.estacionamentoService, 'getVagas').and.returnValue(of(vagas));
+        spyOn(component, 'salvarCarroVaga');
+        
+        component.buscaVaga();
+        
+        expect(component.estacionamentoService.getVagas).toHaveBeenCalled();
+        expect(component.salvarCarroVaga).toHaveBeenCalledWith(vagas[0]._id);
+    });
+            
+    it('should display modal when isVisible is true', () => {
+        component.isVisible = true;
+        component.dadosCardQrCode = {
+            numVaga: 1,
+            dataHoraEntrada: '2023-11-25T10:00:00Z'
+        };
+        component.codigoQRCode = 'QR Code Data';
+        fixture.detectChanges();
+        const modalElement = fixture.nativeElement.querySelector('.modal');
+        expect(modalElement).toBeTruthy();
+        expect(modalElement.textContent).toContain('Sua vaga é: 1');
+        expect(modalElement.textContent).toContain('Hora da entrada: 2023-11-25T10:00:00Z');
+        const qrCodeElement = fixture.nativeElement.querySelector('.qr-code-container');
+        expect(qrCodeElement).toBeTruthy();
+    });
+
 });

@@ -82,12 +82,11 @@ export class EntradaEstacionamentoComponent implements AfterViewInit{
       'eng',
     ).then(({ data: { text } }) => {
       this.ocrResult = text;
-      this.buscaVaga(text);
-
+      this.buscaVaga();
     });
   }
 
-  buscaVaga(placa: string) {
+  buscaVaga() {
     this.estacionamentoService.getVagas().subscribe(
       vagas => {
         const vagaEncontrada = vagas.find((vaga: any) => vaga.disponivel)
@@ -105,7 +104,6 @@ export class EntradaEstacionamentoComponent implements AfterViewInit{
     this.estacionamentoService.salvarVagas(payload)
       .subscribe(retorno => {
         this.dadosCardQrCode = retorno;
-        console.log(this.dadosCardQrCode)
         this.isVisible = true;
         this.codigoQRCode = `${retorno.dataHoraEntrada}` + `${retorno.placaCarro}` + `${retorno.numVaga}`;
       })
