@@ -96,16 +96,17 @@ export class EntradaEstacionamentoComponent implements AfterViewInit{
   }
 
   salvarCarroVaga(id: string) {
+    const dataHoraEntrada = moment().format('YYYY-MM-DD HH:mm:ss');
     const payload = {
       id: [`${id}`],
       placaCarro: this.ocrResult,
-      dataHoraEntrada: moment(new Date).format("MM-DD-YY:HH:MM:SS")
+      dataHoraEntrada
     }
     this.estacionamentoService.salvarVagas(payload)
       .subscribe(retorno => {
         this.dadosCardQrCode = retorno;
         this.isVisible = true;
-        this.codigoQRCode = `${retorno.dataHoraEntrada}` + `${retorno.placaCarro}` + `${retorno.numVaga}`;
+        this.codigoQRCode = `${dataHoraEntrada}` + `${retorno.placaCarro}` + `${retorno.numVaga}`;
       })
   }
 

@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   }
 
   resetGrid() {
-    this.table.reset();
+    window.location.reload();
   }
 
   initChart() {

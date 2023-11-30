@@ -8,7 +8,7 @@
 
 <div *ngIf="isVisible" class="modal">
   Sua vaga é: {{dadosCardQrCode.numVaga}}<br>
-  Hora da entrada: {{dadosCardQrCode.dataHoraEntrada}}
+  Hora da entrada: {{dadosCardQrCode.dataHoraEntrada | date: 'dd/MM/yyyy HH:mm:ss'}}
   <div class="qr-code-container">
     <qrcode [qrdata]="codigoQRCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
   </div>
