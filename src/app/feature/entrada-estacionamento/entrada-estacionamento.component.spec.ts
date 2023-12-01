@@ -90,7 +90,8 @@ describe('EntradaEstacionamentoComponent', () => {
     it('#salvarCarroVaga should call the service and update the component properties', () => {
         const id = '123';
         const ocrResult = 'recognized text';
-        const dataHoraEntrada = moment(new Date()).format("MM-DD-YY:HH:MM:SS");
+        // Corrigindo o formato da data para corresponder ao formato esperado
+        const dataHoraEntrada = moment().format("YYYY-MM-DD HH:mm:ss");
         const retorno = {
             dataHoraEntrada: dataHoraEntrada,
             placaCarro: ocrResult,
@@ -138,21 +139,25 @@ describe('EntradaEstacionamentoComponent', () => {
         expect(component.estacionamentoService.getVagas).toHaveBeenCalled();
         expect(component.salvarCarroVaga).toHaveBeenCalledWith(vagas[0]._id);
     });
-            
+    
     it('should display modal when isVisible is true', () => {
         component.isVisible = true;
         component.dadosCardQrCode = {
             numVaga: 1,
-            dataHoraEntrada: '2023-11-25T10:00:00Z'
+            // Usando um formato de data que o DatePipe possa entender
+            dataHoraEntrada: '2023-11-25T07:00:00'
         };
         component.codigoQRCode = 'QR Code Data';
         fixture.detectChanges();
         const modalElement = fixture.nativeElement.querySelector('.modal');
         expect(modalElement).toBeTruthy();
         expect(modalElement.textContent).toContain('Sua vaga é: 1');
-        expect(modalElement.textContent).toContain('Hora da entrada: 2023-11-25T10:00:00Z');
+        // Adapte esta parte para verificar a exibição correta com base em como o DatePipe transforma a data
+        expect(modalElement.textContent).toContain('Hora da entrada: 25/11/2023 07:00:00');
         const qrCodeElement = fixture.nativeElement.querySelector('.qr-code-container');
         expect(qrCodeElement).toBeTruthy();
     });
-
+    
+    
+    
 });

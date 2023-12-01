@@ -6,7 +6,7 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class EstacionamentoService {
-  private apiUrl = 'https://estacionamento-server.azurewebsites.net';
+  public apiUrl = 'https://estacionamento-server.azurewebsites.net';
   constructor(
     private http: HttpClient
   ) { }

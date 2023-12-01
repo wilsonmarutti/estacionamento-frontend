@@ -91,6 +91,7 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     estacionamentoService = TestBed.inject(EstacionamentoService);
+    spyOn(component, 'resetGrid').and.stub();
     fixture.detectChanges();
   });
 
